@@ -51,14 +51,14 @@ def get_sales_by_region():
 @app.route('/bmw/fuel_popularity', methods=["POST"])
 def get_eletric_popularity():
     df_bmw = get_df_bmw()
+    allowed_types = df_bmw['Fuel_Type'].unique().tolist()
 
     fuel_type = request.args.get('fuel_type', type=str)
 
-    if not isinstance(fuel_type, str):
+    if not fuel_type:
         abort(400, description=f"O parâmetro 'fuel_type' deve ser um entre {', '.join(allowed_types)}")
     
     fuel_type = fuel_type.capitalize()
-    allowed_types = df_bmw['Fuel_Type'].unique().tolist()
 
     if fuel_type not in allowed_types:
         abort(400, description=f"O parâmetro 'fuel_type' deve ser um entre {', '.join(allowed_types)}")
