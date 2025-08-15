@@ -7,7 +7,12 @@ app = Flask(__name__)
 app.json.sort_keys = False
 
 def get_df_bmw() -> pd.DataFrame:
-    file = request.files['file']
+    file = None
+    
+    try:
+        file = request.files['file']
+    except KeyError:
+        abort(400, description="O arquivo 'file' é obrigatório.")
 
     if not file or file.filename == '':
         abort(400)
