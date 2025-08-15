@@ -90,16 +90,17 @@ def get_colorful_winners():
 def get_pricing_evolution():
     df_bmw = get_df_bmw()
 
-    df_gp = df_bmw.groupby(['Year', 'Model'], as_index=False)['Price_USD'].sum()
-
-    df_gp['Price_USD'] = df_gp['Price_USD'].apply(format_number)
+    df_gp = df_bmw.groupby(['Year', 'Model'], as_index=False)['Price_USD'].mean()
 
     df_pivot = df_gp.pivot_table(
         index='Model',
         columns='Year',
         values='Price_USD',
-        aggfunc='first'
+        aggfunc='mean'
     ).reset_index()
+
+    for col in df_pivot.columns[1:]:
+        df_pivot[col] = df_pivot[col].apply(format_number)
 
     return df_pivot.to_dict(orient='records')
 
